@@ -1,0 +1,33 @@
+table {
+    border: 1px solid teal;
+    width: 800px;
+    height: 200px;
+}
+ 
+th {
+    border-bottom: 1px solid teal;
+}
+ 
+td {
+    text-align: center;
+
+    button {
+        cursor: pointer;
+    }
+}
+
+.userNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+
+    a {
+        background-color: teal;
+        height: max-content;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }   
+}

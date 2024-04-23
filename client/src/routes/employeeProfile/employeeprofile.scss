@@ -1,0 +1,12 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+}
