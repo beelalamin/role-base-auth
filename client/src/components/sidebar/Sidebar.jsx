@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import apiRequest from "../../lib/apiRequest";
 import "./sidebar.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 function Sidebar({ routes }) {
   const { updateUser } = useContext(AuthContext);
@@ -9,7 +9,7 @@ function Sidebar({ routes }) {
 
   const logoutUser = async () => {
     try {
-      const res = await apiRequest.post("/logout");
+      await apiRequest.post("/logout");
       updateUser(null);
       navigate("/");
     } catch (error) {
@@ -21,14 +21,18 @@ function Sidebar({ routes }) {
     <aside>
       <div className="sidebarContainer">
         {routes.map((i) => (
-          <Link key={i.link} to={i.link}>{i.lable}</Link>
+          <NavLink
+            key={i.link}
+            to={i.link}
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            {i.lable}
+          </NavLink>
         ))}
         {/* <Link to="/users">User Account</Link>
         <Link to="/hr">Human Resource</Link>
         <Link to="/profile">Employee Profile</Link> */}
-        <Link onClick={logoutUser}>
-          Quit
-        </Link>
+        <Link onClick={logoutUser}>Quit</Link>
       </div>
     </aside>
   );

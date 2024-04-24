@@ -4,13 +4,13 @@ import UserAccount from "./routes/userAccount/UserAccount";
 import HumanResource from "./routes/HumanResource/HumanResource";
 import EmployeeProfile from "./routes/employeeProfile/EmployeeProfile";
 import AddUser from "./routes/adduser/AddUser";
-import UpdateUser from "./routes/updateuser/UpdateUser";
 import LoginPage from "./routes/loginPage/LoginPage";
 import PageNotFound from "./routes/404/PageNotFound";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { singleUser, getAllUsers } from "./lib/loader";
-import Test from "./routes/Test";
+import UpdateUserProfile from "./routes/updateuser/UpdateUser";
+import UserList from "./routes/usersList/UsersList";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -39,8 +39,9 @@ function App() {
       element: <PageNotFound />,
     },
     {
-      path: "/test",
-      element: <Test />,
+      path: "/users",
+      element: <UserList />,
+      loader: getAllUsers,
     },
   ]);
 
@@ -106,13 +107,13 @@ function App() {
         },
         {
           path: "/user/update/:id",
-          element: <UpdateUser />,
+          element: <UpdateUserProfile />,
           loader: singleUser,
         },
-        {
-          path: "/user/:id",
-          element: <UpdateUser />,
-        },
+        // {
+        //   path: "/user/:id",
+        //   element: <UpdateUser />,
+        // },
         {
           path: "*",
           element: <PageNotFound />,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./adduser.scss";
 import apiRequest from "../../lib/apiRequest";
+import "./adduser.scss";
 
 function AddUser() {
   const [error, setError] = useState("");
@@ -23,27 +23,34 @@ function AddUser() {
     const role = formData.get("role");
     const avatar = formData.get("avatar");
 
-    console.log(avatar);
-    // try {
-    //   const res = await apiRequest.post("/register", {
-    //     firstName,
-    //     lastName,
-    //     position,
-    //     email,
-    //     password,
-    //     role,
-    //     avatar,
-    //   });
-    //   console.log(res.data);
-    //   alert(res.data.message);
-    //   navigate("/users");
-    // } catch (err) {
-    //   console.log(err);
-    //   console.error(err.response.data.message);
-    //   setError(err.response.data.message);
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    try {
+      const res = await apiRequest.post(
+        "/register",
+        {
+          firstName,
+          lastName,
+          position,
+          email,
+          password,
+          role,
+          avatar,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res.data);
+      alert(res.data.message);
+      navigate("/users");
+    } catch (err) {
+      console.log(err);
+      console.error(err.response.data.message);
+      setError(err.response.data.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

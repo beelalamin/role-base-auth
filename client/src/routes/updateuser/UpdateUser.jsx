@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import apiRequest from "../../lib/apiRequest";
 import "./updateuser.scss";
 import { useNavigate, useLoaderData } from "react-router-dom";
-function UpdateUser() {
-  const user = useLoaderData();
+import { AuthContext } from "../../context/AuthContext";
 
+function UpdateUserProfile() {
+  const user = useLoaderData();
+  const { updateUser } = useContext(AuthContext);
   const [error, setError] = useState("");
 
   const [firstName, setFirstName] = useState(user.firstName);
@@ -13,6 +15,7 @@ function UpdateUser() {
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState(user.password);
   const [role, setRole] = useState(user.role);
+  const [avatar, setAvatar] = useState(user.avatar);
 
   const [isloading, setIsLoading] = useState(false);
 
@@ -23,15 +26,24 @@ function UpdateUser() {
     setIsLoading(true);
     setError("");
     try {
-      const res = await apiRequest.put(`/user/update/${user._id}`, {
-        firstName,
-        lastName,
-        position,
-        email,
-        password,
-        role,
-      });
-
+      const res = await apiRequest.put(
+        `/user/update/${user.id}`,
+        {
+          firstName,
+          lastName,
+          position,
+          email,
+          password,
+          role,
+          avatar,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      updateUser(res.data);
       alert(res.data.message);
       navigate("/users");
     } catch (err) {
@@ -89,15 +101,16 @@ function UpdateUser() {
             onChange={(e) => setRole(e.target.value)}
           >
             <option defaultValue={user.role}>{user.role}</option>
-            <option defaultValue="admin">Admin</option>
-            <option defaultValue="hr">HR</option>
-            <option defaultValue="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="hr">HR</option>
+            <option value="user">User</option>
           </select>
 
           <input
             type="file"
-            name="myImage"
+            name="avatar"
             accept="image/png, image/gif, image/jpeg"
+            onChange={(e) => setAvatar(e.target.files[0])}
           />
         </div>
 
@@ -107,4 +120,4 @@ function UpdateUser() {
   );
 }
 
-export default UpdateUser;
+export default UpdateUserProfile;

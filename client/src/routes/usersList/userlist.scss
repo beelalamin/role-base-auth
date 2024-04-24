@@ -1,0 +1,14 @@
+.table_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+
+    table {
+        width: 90%;
+    }
+    img{
+        width: 80px;
+    }
+}
