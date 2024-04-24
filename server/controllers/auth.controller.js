@@ -48,14 +48,8 @@ const registerUser = aysncHandler(async (req, res) => {
     email,
     password,
     role,
-    avatar: avatar.filename,
+    avatar: req.file.filename,
   });
-
-  // const userAvatar = await User.create({ avatar: avatar.filename });
-
-  // if (!userAvatar) {
-  //   res.status(400).json({ message: "Invalid user avatar!" });
-  // }
 
   if (user) {
     res.status(201).json({ message: "User Created Successfully!" });
@@ -85,13 +79,15 @@ const getUserProfile = aysncHandler(async (req, res) => {
   if (!user) {
     res.status(401).json({ message: "User doesn't exist!" });
   } else {
-    res.send(user);
-    // id: user._id,
-    // firstName: user.firstName,
-    // lastName: user.lastName,
-    // position: user.position,
-    // email: user.email,
-    // role: user.role,
+    res.send({
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      position: user.position,
+      email: user.email,
+      role: user.role,
+      avatar: user.avatar,
+    });
   }
 });
 
@@ -101,6 +97,7 @@ const getUserProfile = aysncHandler(async (req, res) => {
 
 const updateUserProfile = aysncHandler(async (req, res) => {
   const id = req.params.id;
+  const { firstName, lastName, position, email, role } = req.body;
   const user = await User.findById(id);
   if (user) {
     user.firstName = req.body.firstName || user.firstName;
@@ -108,6 +105,7 @@ const updateUserProfile = aysncHandler(async (req, res) => {
     user.position = req.body.position || user.position;
     user.email = req.body.email || user.email;
     user.role = req.body.role || user.role;
+    user.avatar = req.file?.filename || user.avatar;
 
     if (req.body.password) {
       user.password = req.body.password;
@@ -121,6 +119,7 @@ const updateUserProfile = aysncHandler(async (req, res) => {
       position: updatedUser.position,
       email: updatedUser.email,
       role: updatedUser.role,
+      avatar: updatedUser.avatar,
       message: "User Updated Successfully",
     });
   } else {
@@ -152,20 +151,11 @@ const deleteUser = aysncHandler(async (req, res) => {
     res.status(400).json({ message: "No user found" });
     throw new Error("No user found");
   }
-
   await user.deleteOne();
-
   res.status(201).json({ message: "User deleted successfully!" });
-  // const id = req.params.id;
-  // const users = await User.findOneAndRemove(id, (err) => {
-  //   if (err) return res.status(401).json({ message: "Failed to delete user" });
-  //   res.status(200).json({ message: "User deleted successfully" });
-  // });
-
-  // if (!users)
-  //   return res.status(404).json({ message: "Failed to fetch user data" });
-  // res.send(users);
 });
+
+
 
 export {
   authUser,
